@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacs, getFilter } from 'redux/selectors';
-import { deleteContact } from 'redux/contactsSlice';
+import { deleteContact } from 'redux/operations';
+import { selectVisibleContacts } from 'redux/selectors';
 import {
   List,
   Item,
@@ -9,21 +9,15 @@ import {
 } from 'components/ContactList/ContactList.styled';
 
 export const ContactList = () => {
-  const contacts = useSelector(getContacs);
-  console.log(contacts);
-  const filter = useSelector(getFilter);
   const dispatch = useDispatch();
-
-  const getFiltredContacts = contacts.filter(contact =>
-    contact.name.toUpperCase().includes(filter.toUpperCase())
-  );
+  const contacts = useSelector(selectVisibleContacts);
 
   return (
     <List>
-      {getFiltredContacts?.map(({ id, name, number }) => (
+      {contacts.map(({ id, name, phone }) => (
         <Item key={id}>
           <Text>
-            {name}: {number}
+            {name}: {phone}
           </Text>
           <Button type="button" onClick={() => dispatch(deleteContact(id))}>
             Delete
